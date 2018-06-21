@@ -1,6 +1,6 @@
 <template>
-    <div class="header">
-        <div class="header-city">
+    <div class="header" :style="opacityStyle">
+        <div class="header-city" :on="handleScroll">
             <span class="cityClick">{{ city }}</span>
         </div>
         <div class="header-search">
@@ -20,8 +20,32 @@
         name : 'HomeHeader',
         data (){
             return {
-                city : '郑州'
+                city : '郑州',
+                opacityStyle : {
+                    opacity : 1,
+                    background : 'rgba(255,255,255,0)'
+                }
             }
+        },
+        methods : {
+            handleScroll (){
+                const top = document.documentElement.scrollTop;
+                let opacity = top / 140;
+                if(top > 60 && top < 300) {
+                    this.opacityStyle = {
+                        opacity,
+                        background: '-webkit-gradient(linear, 0 0, 100% 0, from(rgb(254, 81, 111)), to(rgb(254, 104, 108))) rgb(255, 255, 255)'
+                    }
+                }else if(top == 0){
+                    this.opacityStyle = {
+                        background: 'rgba(255,255,255,0)'
+                    }
+                }
+            }
+        },
+        /* 页面加载就进行的生命周期函数 */
+        activated (){
+            window.addEventListener('scroll',this.handleScroll);
         }
     }
 </script>
@@ -39,10 +63,7 @@
         display : flex;
         padding:7px 5px 6px 15px;
         box-sizing : border-box;
-        background: rgba(255,255,255,0);
         position: fixed;
-        /* top: 0;
-        left:0; */
         z-index : 1100;
         .header-city{
             width : 1.1rem;
